@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 /**
@@ -27,4 +29,14 @@ public class SuperEntity {
 
 	@Column(name = "updated_date")
 	private LocalDateTime updatedDate;
+
+	@PrePersist
+	public void preCreate() {
+		createdDate = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedDate = LocalDateTime.now();
+	}
 }
