@@ -53,9 +53,8 @@ public class AuthServiceImpl implements AuthService {
 		userAuthentication.setUserId(existedUser.getId());
 		userAuthentication.setRole(existedUser.getRole());
 		userAuthentication.setType(existedUser.getType());
-		Map<String, Object> payload = objectMapper.convertValue(userAuthentication,
-				new TypeReference<Map<String, Object>>() {
-				});
+		Map<String, Object> payload = objectMapper.convertValue(userAuthentication, new TypeReference<>() {
+		});
 		LoginOutput output = new LoginOutput();
 		output.setUserId(existedUser.getId());
 		output.setToken(AuthUtil.generateToken(payload, secretKey));

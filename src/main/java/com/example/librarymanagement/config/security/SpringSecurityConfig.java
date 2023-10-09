@@ -24,7 +24,9 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http.csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/admin/**").hasAuthority("ADMIN")
 				.anyRequest()
 				.authenticated()
 				.and()

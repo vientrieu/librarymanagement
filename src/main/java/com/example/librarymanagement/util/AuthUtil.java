@@ -1,13 +1,16 @@
 package com.example.librarymanagement.util;
 
+import com.example.librarymanagement.dto.auth.UserAuthentication;
 import com.example.librarymanagement.exception.AuthException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author mangvientrieu
@@ -20,12 +23,8 @@ public final class AuthUtil {
 
 	public static String generateToken(Map<String, Object> payload, String secretKey) {
 		Date now = new Date();
-		return Jwts.builder()
-				.setClaims(payload)
-				.setIssuedAt(now)
-				.setExpiration(new Date(now.getTime() + 10 * 60 * 1000))
-				.signWith(SignatureAlgorithm.HS256, secretKey)
-				.compact();
+		return Jwts.builder().setClaims(payload).setIssuedAt(now).setExpiration(
+				new Date(now.getTime() + 10 * 60 * 1000)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -37,5 +36,17 @@ public final class AuthUtil {
 		} catch (Exception e) {
 			throw new AuthException("TOKEN_FAIL", "Token không khả dụng");
 		}
+	}
+
+	public static UserAuthentication getUserAuthentication() {
+		return (UserAuthentication) SecurityContextHolder.getContext()
+				.getAuthentication()
+				.getPrincipal();
+	}
+
+	public static Long getUserId() {
+		UserAuthentication userAuthentication = getUserAuthentication();
+		return Optional.ofNullable(userAuthentication).map(UserAuthentication::getUserId)
+				.orElse(null);
 	}
 }
