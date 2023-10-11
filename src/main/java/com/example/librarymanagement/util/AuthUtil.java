@@ -24,7 +24,7 @@ public final class AuthUtil {
 	public static String generateToken(Map<String, Object> payload, String secretKey) {
 		Date now = new Date();
 		return Jwts.builder().setClaims(payload).setIssuedAt(now).setExpiration(
-				new Date(now.getTime() + 10 * 60 * 1000)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
+				new Date(now.getTime() + 10 * 60 * 10000)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
 	}
 
 	@SuppressWarnings("unchecked")
