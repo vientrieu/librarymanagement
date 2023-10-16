@@ -2,7 +2,9 @@ package com.example.librarymanagement.service;
 
 import com.example.librarymanagement.dto.book.input.BorrowBookInput;
 import com.example.librarymanagement.dto.book.input.ReturnBookInput;
-import com.example.librarymanagement.dto.book.output.BorrowHistoryOutput;
+import com.example.librarymanagement.entity.BookEntity;
+import com.example.librarymanagement.repository.projection.BorrowHistoryProjection;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,5 +16,7 @@ public interface BookService {
 
 	boolean returnBook(ReturnBookInput input);
 
-	List<BorrowHistoryOutput> getBorrowHistory();
+	Page<BorrowHistoryProjection> getBorrowHistory(int page, int size);
+
+	List<BookEntity> searchBookByKeyword(String keyword);
 }

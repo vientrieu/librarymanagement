@@ -3,13 +3,16 @@ package com.example.librarymanagement.controller;
 import com.example.librarymanagement.dto.api.ResponseDto;
 import com.example.librarymanagement.dto.book.input.BorrowBookInput;
 import com.example.librarymanagement.dto.book.input.ReturnBookInput;
-import com.example.librarymanagement.dto.book.output.BorrowHistoryOutput;
+import com.example.librarymanagement.entity.BookEntity;
+import com.example.librarymanagement.repository.projection.BorrowHistoryProjection;
 import com.example.librarymanagement.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,7 +37,13 @@ public class BookController {
 	}
 
 	@GetMapping("/borrow-history")
-	public ResponseDto<List<BorrowHistoryOutput>> getBorrowHistory() {
-		return ResponseDto.ok(bookService.getBorrowHistory());
+	public ResponseDto<Page<BorrowHistoryProjection>> getBorrowHistory(@RequestParam(defaultValue = "0") int page,
+	                                                                   @RequestParam(defaultValue = "30") int size) {
+		return ResponseDto.ok(bookService.getBorrowHistory(page, size));
+	}
+
+	@GetMapping("/search")
+	public ResponseDto<List<BookEntity>> getBorrowHistory(@RequestParam(defaultValue = "") String keyword) {
+		return ResponseDto.ok(bookService.searchBookByKeyword(keyword));
 	}
 }

@@ -2,25 +2,28 @@ package com.example.librarymanagement.service.impl;
 
 import com.example.librarymanagement.dto.book.input.BorrowBookInput;
 import com.example.librarymanagement.dto.book.input.ReturnBookInput;
-import com.example.librarymanagement.dto.book.output.BorrowHistoryOutput;
 import com.example.librarymanagement.entity.BookDistributionEntity;
+import com.example.librarymanagement.entity.BookEntity;
 import com.example.librarymanagement.entity.BookManagementEntity;
 import com.example.librarymanagement.entity.UserEntity;
 import com.example.librarymanagement.exception.BusinessException;
 import com.example.librarymanagement.repository.BookDistributionRepository;
 import com.example.librarymanagement.repository.BookManagementRepository;
+import com.example.librarymanagement.repository.BookRepository;
 import com.example.librarymanagement.repository.UserRepository;
+import com.example.librarymanagement.repository.projection.BorrowHistoryProjection;
 import com.example.librarymanagement.service.BookService;
 import com.example.librarymanagement.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author mangvientrieu
@@ -35,6 +38,8 @@ public class BookServiceImpl implements BookService {
 	private BookDistributionRepository bookDistributionRepository;
 	@Autowired
 	private BookManagementRepository bookManagementRepository;
+	@Autowired
+	private BookRepository bookRepository;
 
 	@Override
 	@Transactional
@@ -76,11 +81,14 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<BorrowHistoryOutput> getBorrowHistory() {
+	public Page<BorrowHistoryProjection> getBorrowHistory(int page, int size) {
 		Long userId = AuthUtil.getUserId();
-		List<BookManagementEntity> history = bookManagementRepository.findBorrowHistory(userId);
-		Set<Long> bookDistributionIds = history.stream().map(BookManagementEntity::getBookDistribution).map(
-				BookDistributionEntity::getId).collect(Collectors.toSet());
-		return null;
+		return bookManagementRepository.findBorrowHistory(userId,
+				PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")));
+	}
+
+	@Override
+	public List<BookEntity> searchBookByKeyword(String keyword) {
+		return bookRepository.searchBookByKeyword(keyword);
 	}
 }

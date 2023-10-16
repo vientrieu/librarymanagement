@@ -2,6 +2,7 @@ package com.example.librarymanagement.exception;
 
 
 import com.example.librarymanagement.dto.api.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
  * @author mangvientrieu
  */
+@Slf4j
 @ControllerAdvice
 public class ErrorHandler {
 
@@ -21,6 +23,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler
 	public ResponseEntity<ResponseDto<?>> handleUnknownException(Exception exception) {
+		log.error("Error", exception);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.fail(null, exception));
 	}
 }
