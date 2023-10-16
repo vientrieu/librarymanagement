@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mangvientrieu
@@ -45,5 +47,10 @@ public class BookController {
 	@GetMapping("/search")
 	public ResponseDto<List<BookEntity>> getBorrowHistory(@RequestParam(defaultValue = "") String keyword) {
 		return ResponseDto.ok(bookService.searchBookByKeyword(keyword));
+	}
+
+	@PostMapping("/import")
+	public ResponseDto<List<Map<String, Object>>> importBookFromExcel(@RequestParam("file") MultipartFile file) {
+		return ResponseDto.ok(bookService.importBookFromExcel(file));
 	}
 }

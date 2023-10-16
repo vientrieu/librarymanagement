@@ -14,6 +14,7 @@ import com.example.librarymanagement.repository.UserRepository;
 import com.example.librarymanagement.repository.projection.BorrowHistoryProjection;
 import com.example.librarymanagement.service.BookService;
 import com.example.librarymanagement.util.AuthUtil;
+import com.example.librarymanagement.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +22,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mangvientrieu
@@ -90,5 +93,10 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<BookEntity> searchBookByKeyword(String keyword) {
 		return bookRepository.searchBookByKeyword(keyword);
+	}
+
+	@Override
+	public List<Map<String, Object>> importBookFromExcel(MultipartFile file) {
+		return ExcelUtil.readExcel(file);
 	}
 }
