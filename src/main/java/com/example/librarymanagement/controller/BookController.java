@@ -5,6 +5,7 @@ import com.example.librarymanagement.dto.book.input.BorrowBookInput;
 import com.example.librarymanagement.dto.book.input.ReturnBookInput;
 import com.example.librarymanagement.entity.BookEntity;
 import com.example.librarymanagement.repository.projection.BorrowHistoryProjection;
+import com.example.librarymanagement.repository.projection.CountBookProjection;
 import com.example.librarymanagement.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author mangvientrieu
@@ -50,7 +50,17 @@ public class BookController {
 	}
 
 	@PostMapping("/import")
-	public ResponseDto<List<Map<String, Object>>> importBookFromExcel(@RequestParam("file") MultipartFile file) {
+	public ResponseDto<List<BookEntity>> importBookFromExcel(@RequestParam("file") MultipartFile file) {
 		return ResponseDto.ok(bookService.importBookFromExcel(file));
+	}
+
+	@GetMapping("/count-total")
+	public ResponseDto<List<CountBookProjection>> countTotalBook() {
+		return ResponseDto.ok(bookService.countTotalBook());
+	}
+
+	@GetMapping("/count-existed")
+	public ResponseDto<List<CountBookProjection>> countExistedBook() {
+		return ResponseDto.ok(bookService.countExistedBook());
 	}
 }

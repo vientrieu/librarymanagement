@@ -19,8 +19,6 @@ public class SpringSecurityConfig {
 
 	@Autowired
 	private JWTFilter jwtFilter;
-//	@Autowired
-//	private RoleFilter roleFilter;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,7 +29,6 @@ public class SpringSecurityConfig {
 				.authenticated()
 				.and()
 				.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
-//				.addFilterAfter(roleFilter, JWTFilter.class)
 				.httpBasic();
 		return http.build();
 	}

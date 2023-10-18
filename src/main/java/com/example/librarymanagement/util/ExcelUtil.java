@@ -52,7 +52,7 @@ public final class ExcelUtil {
 				}
 				case NUMERIC: {
 					if (DateUtil.isCellDateFormatted(cell)) {
-						rowData.put(header.get(cell.getColumnIndex()), cell.getDateCellValue());
+						rowData.put(header.get(cell.getColumnIndex()), cell.getLocalDateTimeCellValue());
 					} else {
 						rowData.put(header.get(cell.getColumnIndex()), cell.getNumericCellValue());
 					}

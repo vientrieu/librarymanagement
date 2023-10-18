@@ -1,5 +1,6 @@
 package com.example.librarymanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,10 +30,12 @@ public class BookEntity extends SuperEntity {
 	@Column(name = "published_Date")
 	private LocalDate publishedDate;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "author_id")
 	private AuthorEntity author;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
