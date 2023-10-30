@@ -35,7 +35,7 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().antMatchers("/auth/**");
+		return (web) -> web.ignoring().antMatchers("/auth/**", "/kafka/**");
 	}
 
 }

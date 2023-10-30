@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -31,12 +32,16 @@ public class AuthServiceImpl implements AuthService {
 	private UserRepository userRepository;
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	@Value("${app.secret-key}")
 	private String secretKey;
 
 	@Override
 	public LoginOutput login(LoginInput input) {
+		Object test = redisTemplate.opsForValue().get("test");
+		if (test != null) return (LoginOutput) test;
 		// Kiểm tra username có tồn tại chưa
 		String username = input.getUsername();
 		UserEntity existedUser = userRepository.findFirstByUsername(username);
@@ -58,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
 		LoginOutput output = new LoginOutput();
 		output.setUserId(existedUser.getId());
 		output.setToken(AuthUtil.generateToken(payload, secretKey));
+		redisTemplate.delete("test");
 		return output;
 	}
 
